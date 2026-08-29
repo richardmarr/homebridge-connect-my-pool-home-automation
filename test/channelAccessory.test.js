@@ -92,6 +92,7 @@ function createPlatform() {
   };
   const Characteristic = {
     Name: 'Name',
+    ConfiguredName: 'ConfiguredName',
     Manufacturer: 'Manufacturer',
     Model: 'Model',
     SerialNumber: 'SerialNumber',
@@ -140,6 +141,10 @@ assert.deepEqual(filterServices.map(service => service.name), ['Off', 'Auto', 'L
 assert.equal(filterAccessory.services.some(service => service.type === platform.Service.ContactSensor), false);
 assert.equal(filterServices[0].primary, true);
 assert.equal(filterServices[0].linked.length, 4);
+assert.deepEqual(
+  filterServices.map(service => service.getCharacteristic(platform.Characteristic.ConfiguredName).value),
+  ['Off', 'Auto', 'Low', 'Medium', 'High'],
+);
 
 for (const service of filterServices) {
   const expected = service.name === 'Auto';
