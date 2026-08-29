@@ -3,11 +3,11 @@
   "name": "homebridge-connect-my-pool-home-automation",
   "version": "1.0.14",
   "description": "HomeKit integration for Astral Viron Gateway via Home Automation",
-  "homepage": "https://github.com/michaelpettorosso/homebridge-connect-my-pool-home-automation#readme",
+  "homepage": "https://github.com/richardmarr/homebridge-connect-my-pool-home-automation#readme",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/michaelpettorosso/homebridge-connect-my-pool-home-automation.git"
+    "url": "git+https://github.com/richardmarr/homebridge-connect-my-pool-home-automation.git"
   },
   "author": {
     "name": "MICHAEL PETTOROSSO https://github.com/michaelpettorosso"
@@ -18,7 +18,7 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/michaelpettorosso/homebridge-connect-my-pool-home-automation/issues"
+    "url": "https://github.com/richardmarr/homebridge-connect-my-pool-home-automation/issues"
   },
   "engines": {
     "node": ">=16.13.0",
@@ -29,6 +29,8 @@
     "lint": "eslint src/**.ts --max-warnings=0",
     "watch": "npm run build && npm link && nodemon",
     "build": "rimraf ./dist && tsc",
+    "test": "npm run build && node test/channelMode.test.js && node test/channelAccessory.test.js",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [
