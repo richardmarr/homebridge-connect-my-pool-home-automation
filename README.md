@@ -13,6 +13,16 @@
 
 It currently provides Heater, Spa, Channels and Favourite capabilty in HomeKit. Sensor information is used to indicate status of channels (hack to indicate mode, open means not off as it is highlighted in Home).
 
+### Filter pump modes
+
+Filter pumps are exposed as one grouped HomeKit accessory with mutually exclusive
+**Off**, **Auto**, **Low**, **Medium**, and **High** controls. The active control
+reflects the mode reported by ConnectMyPool. Selecting another control cycles the
+ConnectMyPool channel and verifies the reported status after every step until the
+requested mode is reached.
+
+Other channel types retain the original switch and contact-sensor presentation.
+
 ## Installation
 
 If you are new to Homebridge, please first read the Homebridge [documentation](https://www.npmjs.com/package/homebridge).
