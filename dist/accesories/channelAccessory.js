@@ -58,6 +58,10 @@ class ChannelAccessory extends accessory_1.Accessory {
             const modeService = this.accessory.getServiceById(this.service.Switch, subtype)
                 || this.accessory.addService(this.service.Switch, definition.name, subtype);
             modeService.setCharacteristic(this.Characteristic.Name, definition.name);
+            // Modern versions of Apple Home use ConfiguredName when presenting
+            // multiple services contained in one accessory. Without it, all five
+            // switches inherit the accessory name ("Filter Pump").
+            modeService.setCharacteristic(this.Characteristic.ConfiguredName, definition.name);
             modeService.getCharacteristic(this.Characteristic.On)
                 .onGet(() => this.getModeState(definition.mode))
                 .onSet(value => this.setModeState(Boolean(value), definition.mode));
