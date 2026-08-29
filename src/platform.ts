@@ -219,7 +219,7 @@ export class ConnectMyPoolHomeAutomationHomebridgePlatform implements DynamicPla
     return status.execution_status === 1;
   }
 
-  private async getPoolStatus() : Promise<PoolStatus | undefined> {
+  public async getPoolStatus() : Promise<PoolStatus | undefined> {
     this.log.debug('getPoolStatus');
     const req = axios.post('poolstatus', {
       'pool_api_code': this.config.apikey,
