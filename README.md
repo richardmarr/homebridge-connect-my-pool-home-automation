@@ -47,6 +47,7 @@ Add the platform in `config.json` in your home directory inside `.homebridge` an
     "apikey": "apikey",
     "latitude": latitude,
     "longitude": longitude,
+    "hideFavourites": true,
     "platform": "ConnectMyPoolHomeAutomation"
   }
 ]
@@ -56,3 +57,5 @@ Add the platform in `config.json` in your home directory inside `.homebridge` an
 
 
 Only tested with my setup, I have EVO pool pump, EVO gas heater, spa jets, spa blower, lights and favourites.
+
+Set `hideFavourites` to `true` to omit all ConnectMyPool Favourite accessories from Apple Home. Previously cached Favourite accessories are removed on the next Homebridge restart.

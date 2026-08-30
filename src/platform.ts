@@ -16,6 +16,7 @@ import { LightingAccessory } from './accesories/lightingAccessory';
 import { Accessory } from './accesories/accessory';
 import { PoolStatus } from './status';
 import { PoolConfig } from './config';
+import { shouldExposeFavourites } from './favouriteVisibility';
 
 /**
  * HomebridgePlatform
@@ -58,6 +59,11 @@ export class ConnectMyPoolHomeAutomationHomebridgePlatform implements DynamicPla
     try {
       const device = homekitAccessory.context.device as IDevice;
       const poolStatus = homekitAccessory.context.status as PoolStatus;
+      if (device && device.deviceType === FavouriteDevice.type && !shouldExposeFavourites(this.config)) {
+        this.log.info(`Removing hidden favourite accessory ${homekitAccessory.displayName}`);
+        this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [homekitAccessory]);
+        return;
+      }
       let accessory : Accessory | undefined;
       if (device) {
         this.log.debug('Device', device);
@@ -123,7 +129,7 @@ export class ConnectMyPoolHomeAutomationHomebridgePlatform implements DynamicPla
           devices.push(device);
         }
       }
-      if (poolConfig.has_favourites === true) {
+      if (poolConfig.has_favourites === true && shouldExposeFavourites(this.config)) {
         for (const favourite of poolConfig.favourites) {
           const device:IDevice = new FavouriteDevice(favourite, favourite.name);
           devices.push(device);

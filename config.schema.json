@@ -24,14 +24,19 @@
         "required": true,
         "placeholder": "Latitude used to determine sunrise and sunset",
         "description": "Your pool Latitude."
-      }
-      ,
+      },
       "longitude": {
         "type": "number",
         "title": "Location Longitude",
         "required": true,
         "placeholder": "Longitude used to determine sunrise and sunset",
         "description": "Your pool Longitude."
+      },
+      "hideFavourites": {
+        "type": "boolean",
+        "title": "Hide Favourite accessories",
+        "default": false,
+        "description": "Do not expose ConnectMyPool Favourite controls in Apple Home."
       }
     }
   }
