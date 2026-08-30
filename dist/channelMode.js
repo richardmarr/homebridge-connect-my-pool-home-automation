@@ -14,8 +14,11 @@ exports.FILTER_PUMP_MODES = [
 
 const defaultWait = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-async function cycleToChannelMode(targetMode, readMode, cycleMode, wait = defaultWait, maximumCycles = 6) {
-    let currentMode = await readMode();
+async function cycleToChannelMode(targetMode, readMode, cycleMode, wait = defaultWait, maximumCycles = 6, initialMode) {
+    // ConnectMyPool throttles ordinary status reads to once per minute. Use the
+    // last polled mode when supplied so the first API call is the control action;
+    // the API then permits the verification reads that follow that action.
+    let currentMode = initialMode !== null && initialMode !== void 0 ? initialMode : await readMode();
     if (currentMode === targetMode) {
         return currentMode;
     }

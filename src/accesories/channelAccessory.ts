@@ -213,6 +213,9 @@ export class ChannelAccessory extends Accessory {
         targetMode,
         this.readCurrentMode.bind(this),
         () => this.platform.setPoolAction(PoolAction.CycleChanelMode, this.device.deviceTypeNumber),
+        undefined,
+        6,
+        this.channelConfigStatus.mode,
       );
     } finally {
       this.settingMode = undefined;

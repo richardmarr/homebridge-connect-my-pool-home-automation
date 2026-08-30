@@ -154,7 +154,7 @@ class ChannelAccessory extends accessory_1.Accessory {
         }
         this.settingMode = targetMode;
         try {
-            await (0, channelMode_1.cycleToChannelMode)(targetMode, this.readCurrentMode.bind(this), () => this.platform.setPoolAction(action_1.PoolAction.CycleChanelMode, this.device.deviceTypeNumber));
+            await (0, channelMode_1.cycleToChannelMode)(targetMode, this.readCurrentMode.bind(this), () => this.platform.setPoolAction(action_1.PoolAction.CycleChanelMode, this.device.deviceTypeNumber), undefined, 6, this.channelConfigStatus.mode);
         }
         finally {
             this.settingMode = undefined;

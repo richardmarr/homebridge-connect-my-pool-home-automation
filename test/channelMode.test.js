@@ -36,6 +36,20 @@ async function run() {
     return true;
   }, noWait), 5);
 
+  current = 1;
+  let reads = 0;
+  cycles = 0;
+  assert.equal(await cycleToChannelMode(3, async () => {
+    reads++;
+    return current;
+  }, async () => {
+    current = 3;
+    cycles++;
+    return true;
+  }, noWait, 6, 1), 3);
+  assert.equal(cycles, 1);
+  assert.equal(reads, 1);
+
   await assert.rejects(
     cycleToChannelMode(5, async () => 0, async () => false, noWait),
     /rejected/,

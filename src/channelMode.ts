@@ -30,8 +30,12 @@ export async function cycleToChannelMode(
   cycleMode: CycleMode,
   wait: Wait = defaultWait,
   maximumCycles = 6,
+  initialMode?: number,
 ): Promise<number> {
-  let currentMode = await readMode();
+  // ConnectMyPool throttles ordinary status reads to once per minute. Use the
+  // last polled mode when supplied so the first API call is the control action;
+  // the API then permits the verification reads that follow that action.
+  let currentMode = initialMode ?? await readMode();
   if (currentMode === targetMode) {
     return currentMode;
   }
