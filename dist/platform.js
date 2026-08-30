@@ -31,6 +31,7 @@ class ConnectMyPoolHomeAutomationHomebridgePlatform {
         this.Characteristic = this.api.hap.Characteristic;
         // this is used to track restored cached accessories
         this.accessories = [];
+        this.hiddenFavouriteAccessories = [];
         this.log.debug('Finished initializing platform:', this.config.name);
         axios_1.default.defaults.baseURL = settings_1.BASE_URL;
         // When this event is fired it means Homebridge has restored all cached accessories from disk.
@@ -53,8 +54,8 @@ class ConnectMyPoolHomeAutomationHomebridgePlatform {
             const device = homekitAccessory.context.device;
             const poolStatus = homekitAccessory.context.status;
             if (device && device.deviceType === favouriteDevice_1.FavouriteDevice.type && !(0, favouriteVisibility_1.shouldExposeFavourites)(this.config)) {
-                this.log.info(`Removing hidden favourite accessory ${homekitAccessory.displayName}`);
-                this.api.unregisterPlatformAccessories(settings_1.PLUGIN_NAME, settings_1.PLATFORM_NAME, [homekitAccessory]);
+                this.log.info(`Queuing hidden favourite accessory ${homekitAccessory.displayName} for removal`);
+                this.hiddenFavouriteAccessories.push(homekitAccessory);
                 return;
             }
             let accessory;
@@ -93,6 +94,11 @@ class ConnectMyPoolHomeAutomationHomebridgePlatform {
      */
     async discoverDevices() {
         const devices = [];
+        if (this.hiddenFavouriteAccessories.length > 0) {
+            this.log.info(`Removing ${this.hiddenFavouriteAccessories.length} hidden favourite accessories`);
+            this.api.unregisterPlatformAccessories(settings_1.PLUGIN_NAME, settings_1.PLATFORM_NAME, this.hiddenFavouriteAccessories);
+            this.hiddenFavouriteAccessories.length = 0;
+        }
         const poolConfig = await this.getPoolConfig();
         if (poolConfig) {
             if (poolConfig.has_heaters === true) {

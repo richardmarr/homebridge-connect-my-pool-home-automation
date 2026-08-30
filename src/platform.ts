@@ -29,6 +29,7 @@ export class ConnectMyPoolHomeAutomationHomebridgePlatform implements DynamicPla
 
   // this is used to track restored cached accessories
   public readonly accessories: Accessory[] = [];
+  private readonly hiddenFavouriteAccessories: PlatformAccessory[] = [];
   private pollIntervalId;
   constructor(
     public readonly log: Logging,
@@ -60,8 +61,8 @@ export class ConnectMyPoolHomeAutomationHomebridgePlatform implements DynamicPla
       const device = homekitAccessory.context.device as IDevice;
       const poolStatus = homekitAccessory.context.status as PoolStatus;
       if (device && device.deviceType === FavouriteDevice.type && !shouldExposeFavourites(this.config)) {
-        this.log.info(`Removing hidden favourite accessory ${homekitAccessory.displayName}`);
-        this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [homekitAccessory]);
+        this.log.info(`Queuing hidden favourite accessory ${homekitAccessory.displayName} for removal`);
+        this.hiddenFavouriteAccessories.push(homekitAccessory);
         return;
       }
       let accessory : Accessory | undefined;
@@ -99,6 +100,11 @@ export class ConnectMyPoolHomeAutomationHomebridgePlatform implements DynamicPla
    */
   async discoverDevices() {
     const devices:IDevice[] = [];
+    if (this.hiddenFavouriteAccessories.length > 0) {
+      this.log.info(`Removing ${this.hiddenFavouriteAccessories.length} hidden favourite accessories`);
+      this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.hiddenFavouriteAccessories);
+      this.hiddenFavouriteAccessories.length = 0;
+    }
     const poolConfig = await this.getPoolConfig();
     if (poolConfig) {
       if (poolConfig.has_heaters === true) {
